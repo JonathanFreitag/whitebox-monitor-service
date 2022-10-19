@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: whitebox_db
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - common-network
+
+  redis:
+    image: redis
+    container_name: java-monitor-redis
+    ports:
+      - "6379:6379"
+networks:
+  common-network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+
+
