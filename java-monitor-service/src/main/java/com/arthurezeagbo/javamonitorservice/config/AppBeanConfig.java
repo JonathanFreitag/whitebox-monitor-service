@@ -1,5 +1,6 @@
 package com.arthurezeagbo.javamonitorservice.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.modelmapper.Conditions;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-public class AppConfig {
+public class AppBeanConfig {
 
     private static final String dateFormat = "yyyy-MM-dd";
     private static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
@@ -32,5 +33,10 @@ public class AppConfig {
         modelMapper.getConfiguration().setSkipNullEnabled(true).setPropertyCondition(Conditions.isNotNull())
                 .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 }

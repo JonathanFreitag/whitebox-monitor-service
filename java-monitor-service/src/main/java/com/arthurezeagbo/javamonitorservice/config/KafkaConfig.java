@@ -17,13 +17,19 @@ import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_
 @Configuration
 public class KafkaConfig {
 
-    @Bean
-    public NewTopic notification(){
-        return new NewTopic("notification",6,(short) 3);
-    }
-
     @Value("${spring.kafka.properties.bootstrap.servers}")
     private String bootstrapServer;
+    @Value("${spring.kafka.topic.name}")
+    private String topic;
+    @Value("${spring.kafka.topic.number-of-partitions}")
+    private int numOfPartitions;
+    @Value("${spring.kafka.topic.replication}")
+    private short replication;
+
+    @Bean
+    public NewTopic notification(){
+        return new NewTopic(topic, numOfPartitions,replication);
+    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory(){
@@ -31,7 +37,7 @@ public class KafkaConfig {
                 Map.of(
                         BOOTSTRAP_SERVERS_CONFIG, bootstrapServer,
                         BUFFER_MEMORY_CONFIG, 33554432,
-                        KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+                        KEY_SERIALIZER_CLASS_CONFIG,  StringSerializer.class,
                         VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class
                 )
         );
