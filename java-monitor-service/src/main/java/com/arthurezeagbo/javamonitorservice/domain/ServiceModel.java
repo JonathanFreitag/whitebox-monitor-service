@@ -14,14 +14,16 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
-@Table(name = "service")
+@Table(name = "service",uniqueConstraints = {@UniqueConstraint(columnNames = {"host","port"})})
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column(name = "port")
     private String port;
+    @Column(name = "host")
     private String host;
     private String name;
     @Enumerated(EnumType.STRING)

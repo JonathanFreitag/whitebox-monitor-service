@@ -14,11 +14,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "caller", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Caller {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    @Column(name = "email",unique = true)
     private String email;
     private LocalDateTime currentGraceTime;
     private long graceTimeInMinutes;
