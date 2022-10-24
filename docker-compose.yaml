@@ -15,11 +15,47 @@ services:
     networks:
       - common-network
 
-  redis:
-    image: redis
-    container_name: java-monitor-redis
+  rabbitmq:
+    image: rabbitmq:3.9.22-management-alpine
+    container_name: rabbitmq
     ports:
-      - "6379:6379"
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - common-network
+
+  java-monitor-service:
+    image: java-monitor-service
+    container_name: java-monitor-service
+    build:
+      context: ./java-monitor-service
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-db
+      - rabbitmq
+    restart: always
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db/whitebox_db?useSSL=false&autoReconnect=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+    networks:
+      - common-network
+
+  notification-service:
+    image: notification-service
+    container_name: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    restart: always
+    ports:
+      - "8090:8090"
+    networks:
+      - common-network
 networks:
   common-network:
     driver: bridge
