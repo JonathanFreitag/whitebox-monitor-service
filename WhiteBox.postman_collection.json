@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "6dfd1cb4-f5db-422f-b20c-de947d7eeefe",
+		"name": "WhiteBox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3499994"
+	},
+	"item": [
+		{
+			"name": "JAVA-MONITOR-SERVICE",
+			"item": [
+				{
+					"name": "api",
+					"item": [
+						{
+							"name": "register-service",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"notification-service\",\r\n    \"host\" : \"localhost\",\r\n    \"port\" : 8090\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-caller",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Nneka Ezugwu\",\r\n    \"email\" : \"nneka@gmail.com\",\r\n    \"pollingFrequency\" : 3,\r\n    \"outageStartTime\" : \"2022-10-20 21:50:34\",\r\n    \"outageEndTime\" : \"2022-10-20 22:50:34\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/register-caller",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"register-caller"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-caller-to-service",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/16/caller/19",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"16",
+										"caller",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-grace-time",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"callerId\" : 19,\r\n    \"graceTimeInMinutes\" : 20\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/register-grace-time",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"register-grace-time"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-service-outage",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"serviceId\" : 1,\r\n    \"callerId\" : 3,\r\n    \"startTime\" : \"2022-10-22 01:01:00\",\r\n    \"endTime\" : \"2022-10-22 01:02:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/register-service-outage",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"register-service-outage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-services",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-callers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8089/api/v1/service/callers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"api",
+										"v1",
+										"service",
+										"callers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "NOTIFICATION-SERVICE",
+			"item": [
+				{
+					"name": "api",
+					"item": []
+				},
+				{
+					"name": "view-received-message",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/message",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"message"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
