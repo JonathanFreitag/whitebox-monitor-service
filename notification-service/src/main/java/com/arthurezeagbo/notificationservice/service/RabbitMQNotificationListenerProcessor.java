@@ -25,7 +25,8 @@ public class RabbitMQNotificationListenerProcessor implements NotificationListen
              * At this stage, you send the message payload to caller using any means OR
              * You publish back for another system to consume it
              */
-            log.info(String.format("Message received  %s"),messagePayload.toString());
+            log.info(messagePayload.toString());
+            System.out.println(messagePayload);
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());
         }
