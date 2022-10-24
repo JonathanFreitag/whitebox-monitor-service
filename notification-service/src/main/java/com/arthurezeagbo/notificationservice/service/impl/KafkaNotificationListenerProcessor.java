@@ -1,7 +1,8 @@
-package com.arthurezeagbo.notificationservice.service;
+package com.arthurezeagbo.notificationservice.service.impl;
 
 import com.arthurezeagbo.notificationservice.constant.Topics;
 import com.arthurezeagbo.notificationservice.dto.MessagePayload;
+import com.arthurezeagbo.notificationservice.service.NotificationListenerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

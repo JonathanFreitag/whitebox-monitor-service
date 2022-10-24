@@ -29,7 +29,7 @@ public class ServiceController {
         return ResponseEntity.ok(monitorService.registerCaller(request));
     }
 
-    @PatchMapping(path = "/{serviceId}/caller/{callerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{serviceId}/caller/{callerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity subscribeToService(@PathVariable(name = "serviceId") int serviceId,
                                                               @PathVariable(name = "callerId") int callerId){
         return ResponseEntity.ok(monitorService.registerCallerToService(callerId,serviceId));

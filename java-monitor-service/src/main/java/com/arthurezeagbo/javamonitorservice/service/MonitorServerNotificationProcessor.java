@@ -8,9 +8,12 @@ import com.arthurezeagbo.javamonitorservice.dto.MessagePayload;
 import com.arthurezeagbo.javamonitorservice.repository.CallerRepository;
 import com.arthurezeagbo.javamonitorservice.repository.ServiceOutageRepository;
 import com.arthurezeagbo.javamonitorservice.repository.ServiceRepository;
+import com.sun.xml.bind.v2.TODO;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class MonitorServerNotificationProcessor implements CommandLineRunner {
+public class MonitorServerNotificationProcessor {
 
     @Autowired
     private ServiceRepository serviceRepository;
@@ -35,44 +38,50 @@ public class MonitorServerNotificationProcessor implements CommandLineRunner {
     private NotificationService notificationService;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @Override
-    public void run(String... args) throws Exception {
-        process();
-    }
 
-
-    protected void process(){
+    @Scheduled(cron = "0/5 * * * * *")
+    @SchedulerLock(
+            name = "TASK_SCHEDULER_MONITOR_SERVICE",
+            lockAtLeastFor = "PT5S",
+            lockAtMostFor = "PT10S"
+    )
+    public void process(){
+        ///TODO  change implementation to read from redis due to performance
         List<ServiceModel> services = serviceRepository.findAll();
         Map<ServiceModel, Set<Caller>> callerServiceMap = new HashMap<>();
+        /**
+         * Iterate through the services and callers and put them in a map
+         */
         services.stream()
                 .filter(s -> s.getCallers().size() != 0)
                 .forEach(service -> {
                      callerServiceMap.put(service,service.getCallers());
                 });
 
-        callerServiceMap.forEach((s, callers) -> {
+        callerServiceMap.forEach((service, callers) -> {
             List<Caller> mailList = new ArrayList<>();
             callers.parallelStream()
                     .forEach(caller ->{
-                        /***
-                         * Iterate though the services assigned to a caller, then
-                         *
+                        /**
+                         * Filter service with a planned service outage for a caller
                          */
                         Optional<ServiceOutage> serviceOutage = caller.getServiceOutages().stream()
-                                .filter(outage -> outage == null || outage.getServiceId() == s.getId())
+                                .filter(outage -> outage == null || outage.getServiceId() == service.getId())
                                 .findAny();
-
 
                         String currentDateTimeString = LocalDateTime.now().format(dateTimeFormatter);
                         LocalDateTime now = LocalDateTime.parse(currentDateTimeString,dateTimeFormatter);
+
                         if(serviceOutage.isPresent()){
-                            processCallerWithServiceOutage(serviceOutage.get() ,caller, s, services, now, mailList);
+                            processCallerWithServiceOutage(serviceOutage.get() ,caller, service, services, now, mailList);
                         }else{
-                            processCallerWithoutServiceOutage(caller, s, services, now,mailList);
+                            processCallerWithoutServiceOutage(caller, service, services, now,mailList);
                         }
                     });
-
-            notifyCaller(s, mailList);
+            /**
+             * Send notification to caller
+             */
+            notifyCaller(service, mailList);
         });
     }
 
